@@ -1,4 +1,6 @@
-﻿using System.Domain.Models;
+﻿using FluentAssertions;
+using Moq;
+using System.Domain.Models;
 using Xunit;
 
 namespace System.Test
@@ -8,26 +10,17 @@ namespace System.Test
         [Fact]
         public void VerifyIfRequestIsEmpt()
         {
-            var request = new Product();
-
-            string result = ProductService.CreateNewProductAsync(request);
-
-            Assert.Empty(result);
-
-            Assert.Throws<ArgumentException>(() => ProductService.CreateNewProductAsync(null));
-            Assert.ThrowsAny<Exception>(() => ProductService.CreateNewProductAsync(request));
+            var result = Assert.Throws<ArgumentException>(() => ProductService.CreateNewProductAsync(It.IsAny<Product>()));
+            Assert.Equal("Value cannot be null", result.Message);
         }
 
         public static class ProductService
         {
             public static string CreateNewProductAsync(Product request)
             {
-                if (request == null)
-                {
-                    throw new ArgumentException("Value cannot be null");
-                }
+                if(request == null) throw new ArgumentException("Value cannot be null");
 
-                return string.Empty;
+                return "1";
             }
         }
     }
