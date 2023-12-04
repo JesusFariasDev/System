@@ -10,14 +10,29 @@ namespace System.Test
 
     public class ProductTest
     {
-        [Fact]
-        public void VerifyIfRequestIsEmpt()
+        private readonly ProductApplication sut;
+        private readonly Mock<IProductApplication> _productApplicationMock = new Mock<IProductApplication>();
+
+        public ProductTest()
         {
-            var result = Assert.Throws<ArgumentException>(() => ProductApplication.CreateNewProductAsync(It.IsAny<Product>()));
-            Assert.Equal("Value cannot be null", result.Message);
+            sut = new ProductApplication();
+        }
+
+        [Fact]
+        public async Task VerifyIfRequestIsEmpt()
+        {
+            //Act
+            var result = await Assert.ThrowsAsync<ArgumentNullException>(() => sut.CreateNewProductAsync(It.IsAny<Product>()));
+
+            Assert.Equal("Value cannot be null.", result.Message);
         }
 
 
-       
+        public static Mock<IProductApplication>CallInterfaces()
+        {
+            var _productApplication = new Mock<IProductApplication>();
+
+            return _productApplication;
+        }
     }
 }

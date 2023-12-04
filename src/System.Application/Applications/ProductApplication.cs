@@ -12,7 +12,7 @@ namespace System.Application.Applications
     {
         public async Task<bool> CreateNewProductAsync(Product request)
         {
-            if (request == null) throw new ArgumentException("Value cannot be null");
+            if (request == null) throw new ArgumentNullException();
 
             bool ThereIsProduct = await CheckIfThisProductIsInInventory(request.Code);
 
