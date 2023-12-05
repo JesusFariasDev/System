@@ -2,6 +2,7 @@
 using Moq;
 using System.Application.Applications;
 using System.Domain.Interfaces.ApplicationInterfaces;
+using System.Domain.Interfaces.InfrastructureInterfaces;
 using System.Domain.Models;
 using Xunit;
 
@@ -10,16 +11,17 @@ namespace System.Test
 
     public class ProductTest
     {
-        private readonly ProductApplication sut;
-        private readonly Mock<IProductApplication> _productApplicationMock = new Mock<IProductApplication>();
+        private readonly ProductService sut;
+        private readonly Mock<IProductService> _productServiceMock = new Mock<IProductService>();
+        private readonly Mock<IProductRepository> _productRepositoryMock = new Mock<IProductRepository>();
 
         public ProductTest()
         {
-            sut = new ProductApplication();
+            sut = new ProductService(_productRepositoryMock.Object);
         }
 
         [Fact]
-        public async Task VerifyIfRequestIsEmpt()
+        public async Task Checks_If_Request_Is_Empt()
         {
             //Act
             var result = await Assert.ThrowsAsync<ArgumentNullException>(() => sut.CreateNewProductAsync(It.IsAny<Product>()));
@@ -27,12 +29,18 @@ namespace System.Test
             Assert.Equal("Value cannot be null.", result.Message);
         }
 
-
-        public static Mock<IProductApplication>CallInterfaces()
+        [Fact]
+        public async Task Checks_If_Product_Exist_In_Database()
         {
-            var _productApplication = new Mock<IProductApplication>();
+            var result = await ChecksProductExistInDatabaseAsync("1");
 
-            return _productApplication;
+            Assert.False(result);
         }
+        
+
+
+
+
+
     }
 }
