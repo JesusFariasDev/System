@@ -32,15 +32,28 @@ namespace System.Test
         [Fact]
         public async Task Checks_If_Product_Exist_In_Database()
         {
-            var result = await ChecksProductExistInDatabaseAsync("1");
+            var request = ReturnNewProduct();
 
-            Assert.False(result);
+            //Arrange
+            _productRepositoryMock.Setup(x => x.ChecksProductExistInDatabaseAsync(It.IsAny<string>())).ReturnsAsync(false);
+
+            var response = await sut.CreateNewProductAsync(request);
+
+            Assert.False(response);
         }
         
 
 
 
+        // Auxiliary functions
+        public Product ReturnNewProduct()
+        {
+            var response = new Product
+            {
+                Id = 1
+            };
 
-
+            return response;
+        }
     }
 }

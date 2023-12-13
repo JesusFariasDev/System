@@ -22,14 +22,9 @@ namespace System.Application.Applications
         {
             if (request == null) throw new ArgumentNullException();
 
-            bool ThereIsProduct = await CheckIfThisProductIsInInventory(request.Code);
+            bool ThereIsProduct = await ChecksProductExistInDatabaseAsync(request.Code);
 
-            return true;
-        }
-
-        private Task<bool> CheckIfThisProductIsInInventory(string code)
-        {
-            throw new NotImplementedException();
+            return ThereIsProduct;
         }
         public async Task<bool> ChecksProductExistInDatabaseAsync(string productCode)
         {
