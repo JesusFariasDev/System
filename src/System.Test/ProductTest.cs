@@ -41,8 +41,12 @@ namespace System.Test
 
             Assert.False(response);
         }
+        [Fact]
+        public async Task Checks_If_Negative_Value()
+        {
+            var request = ReturnNewProduct();
+        }
         
-
 
 
         // Auxiliary functions

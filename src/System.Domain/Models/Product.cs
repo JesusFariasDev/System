@@ -8,7 +8,6 @@ namespace System.Domain.Models
 {
     public class Product
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Code { get; set; }
@@ -19,6 +18,7 @@ namespace System.Domain.Models
         public double DisponibleQuantity { get; set; }
         public double ReservedQuantity { get; set; }
         public List<double> PurchasePrice { get; set; }
+        public DateTime DateOfPurchase { get; set; }
         public double Price { get; set; }
         public double TaxValue { get; set; }
         public double ProfitMargin { get; set; }
