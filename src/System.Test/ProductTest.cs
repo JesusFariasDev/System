@@ -4,6 +4,7 @@ using System.Application.Applications;
 using System.Domain.Interfaces.ApplicationInterfaces;
 using System.Domain.Interfaces.InfrastructureInterfaces;
 using System.Domain.Models;
+using System.Infrastructure.Repositories;
 using Xunit;
 
 namespace System.Test
@@ -32,7 +33,7 @@ namespace System.Test
         [Fact]
         public async Task Checks_If_Product_Exist_In_Database()
         {
-            var request = ReturnNewProduct();
+            var request = ReturnNewProduct(null);
 
             //Arrange
             _productRepositoryMock.Setup(x => x.ChecksProductExistInDatabaseAsync(It.IsAny<string>())).ReturnsAsync(false);
@@ -42,22 +43,61 @@ namespace System.Test
             Assert.False(response);
         }
         [Fact]
-        public async Task Checks_If_Negative_Value()
+        public async Task Checks_If_Negative_All_Quantity()
         {
-            var request = ReturnNewProduct();
+            var request = ReturnNewProduct("allQuantity");
+
+            var result = await Assert.ThrowsAsync<Exception>(() => sut.CreateNewProductAsync(request));
+
+            Assert.Equal("Quantity cannot be less than 0.", result.Message);
         }
-        
+
+        [Fact]
+        public async Task Checks_If_Negative_Price()
+        {
+            var request = ReturnNewProduct("price");
+
+            var result = await Assert.ThrowsAsync<Exception>(() => sut.CreateNewProductAsync(request));
+
+            Assert.Equal("Price cannot be less than 0.", result.Message);
+        }
+        [Fact]
+        public async Task Checks_If_Negative_Reserved_Quantity()
+        {
+            var request = ReturnNewProduct("reservedQuantity");
+
+            var result = await Assert.ThrowsAsync<Exception>(() => sut.CreateNewProductAsync(request));
+
+            Assert.Equal("Reserved quantity cannot be less than 0.", result.Message);
+        }
 
 
         // Auxiliary functions
-        public Product ReturnNewProduct()
+        public Product ReturnNewProduct(string? parameter)
         {
-            var response = new Product
+            var response = new Product();
+
+            switch(parameter)
             {
-                Id = 1
-            };
+                case "allQuantity":
+                    response.AllQuantity = -1;
+                    break;
+
+                case "price":
+                    response.Price = -1;
+                    break;
+
+                case "reservedQuantity":
+                    response.ReservedQuantity = -1; 
+                    break;
+
+                default:
+                    response.AllQuantity = 1;
+                    break;
+            }
 
             return response;
+
         }
     }
 }
