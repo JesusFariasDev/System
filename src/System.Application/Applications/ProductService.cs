@@ -20,14 +20,25 @@ namespace System.Application.Applications
 
         public async Task<bool> CreateNewProductAsync(Product request)
         {
+            bool response;
             if (request == null) throw new ArgumentNullException();
 
             bool ThereIsProduct = await ChecksProductExistInDatabaseAsync(request.Code);
 
-            bool values = await ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
+            bool negativeValues = await ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
 
+            bool writeProductInDatabase = await _productRepository.WriteProductInDatabaseAsync(request);
 
-            return ThereIsProduct;
+            if (writeProductInDatabase && !ThereIsProduct && !negativeValues)
+            {
+                response = true;
+            }
+            else
+            {
+                response = false;
+            }
+
+            return response;
         }
 
 

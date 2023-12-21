@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Domain.Interfaces.InfrastructureInterfaces;
+using System.Domain.Models;
 using System.Infrastructure.Context;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,12 @@ namespace System.Infrastructure.Repositories
         public async Task <bool> ChecksProductExistInDatabaseAsync(string productCode)
         {
             await _productContext.AddRangeAsync(productCode);
+
+            return true;
+        }
+        public async Task <bool> WriteProductInDatabaseAsync(Product product)
+        {
+            await _productContext.AddRangeAsync(product);
 
             return true;
         }
