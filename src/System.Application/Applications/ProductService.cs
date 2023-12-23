@@ -23,13 +23,13 @@ namespace System.Application.Applications
             bool response;
             if (request == null) throw new ArgumentNullException();
 
-            bool ThereIsProduct = await ChecksProductExistInDatabaseAsync(request.Code);
+            var ThereIsProduct = await ChecksProductExistInDatabaseAsync(request.Code, true);
 
             bool negativeValues = await ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
 
             bool writeProductInDatabase = await _productRepository.WriteProductInDatabaseAsync(request);
 
-            if (writeProductInDatabase && !ThereIsProduct && !negativeValues)
+            if (writeProductInDatabase && !negativeValues)
             {
                 response = true;
             }
@@ -42,13 +42,18 @@ namespace System.Application.Applications
         }
 
 
-        public async Task<bool> ChecksProductExistInDatabaseAsync(string productCode)
+        public async Task<Product> ChecksProductExistInDatabaseAsync(string productCode, bool newProduct)
         {
-            bool response = await _productRepository.ChecksProductExistInDatabaseAsync(productCode);
+            var response = await _productRepository.GetProductAsync(productCode);
 
-            if (response)
+            if (newProduct && response != null)
             {
                 throw new Exception("Product already exists in our database");
+            }
+
+            else if (!newProduct && response == null)
+            {
+                throw new Exception("Product not found in our database.");
             }
 
             return response;

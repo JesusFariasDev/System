@@ -9,6 +9,6 @@ namespace System.Domain.Interfaces.ApplicationInterfaces
 {
     public interface IProductService
     {
-        Task<bool> CreateNewProductAsync(Product request);
+        Task<bool> CreateNewProductAsync(Product request, bool newProduct);
     }
 }

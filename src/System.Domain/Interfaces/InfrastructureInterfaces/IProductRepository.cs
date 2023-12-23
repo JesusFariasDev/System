@@ -9,7 +9,7 @@ namespace System.Domain.Interfaces.InfrastructureInterfaces
 {
     public interface IProductRepository
     {
-        Task<bool>ChecksProductExistInDatabaseAsync(string code);
+        Task<Product> GetProductAsync(string code);
         Task<bool> WriteProductInDatabaseAsync(Product product);
 
     }

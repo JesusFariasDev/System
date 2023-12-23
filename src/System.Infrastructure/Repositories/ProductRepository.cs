@@ -17,11 +17,11 @@ namespace System.Infrastructure.Repositories
         {
             _productContext = productContext;
         }
-        public async Task <bool> ChecksProductExistInDatabaseAsync(string productCode)
+        public async Task <Product> GetProductAsync(string productCode)
         {
             await _productContext.AddRangeAsync(productCode);
 
-            return true;
+            return new Product();
         }
         public async Task <bool> WriteProductInDatabaseAsync(Product product)
         {
