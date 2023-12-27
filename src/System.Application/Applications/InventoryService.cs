@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace System.Application.Applications
 {
-    public class ProductService : IProductService
+    public class InventoryService : IInventoryService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IInventoryRepository _productRepository;
 
-        public ProductService(IProductRepository productRepository)
+        public InventoryService(IInventoryRepository productRepository)
         {
             _productRepository = productRepository;
         }
@@ -23,7 +23,7 @@ namespace System.Application.Applications
             bool response;
             if (request == null) throw new ArgumentNullException();
 
-            var ThereIsProduct = await ChecksProductExistInDatabaseAsync(request.Code, true);
+            var product = await GetProductAsync(request.Code, true);
 
             bool negativeValues = await ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
 
@@ -42,7 +42,7 @@ namespace System.Application.Applications
         }
 
 
-        public async Task<Product> ChecksProductExistInDatabaseAsync(string productCode, bool newProduct)
+        public async Task<Product> GetProductAsync(string productCode, bool newProduct)
         {
             var response = await _productRepository.GetProductAsync(productCode);
 
@@ -58,6 +58,7 @@ namespace System.Application.Applications
 
             return response;
         }
+
 
         public async Task<bool> ChecksNegativeValues(double allQuantity, double price, double reservedQuantity)
         {

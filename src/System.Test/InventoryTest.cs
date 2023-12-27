@@ -10,15 +10,15 @@ using Xunit;
 namespace System.Test
 {
 
-    public class ProductTest
+    public class InventoryTest
     {
-        private readonly ProductService sut;
-        private readonly Mock<IProductService> _productServiceMock = new Mock<IProductService>();
-        private readonly Mock<IProductRepository> _productRepositoryMock = new Mock<IProductRepository>();
+        private readonly InventoryService sut;
+        private readonly Mock<IInventoryService> _inventoryServiceMock = new Mock<IInventoryService>();
+        private readonly Mock<IInventoryRepository> _inventoryRepositoryMock = new Mock<IInventoryRepository>();
 
-        public ProductTest()
+        public InventoryTest()
         {
-            sut = new ProductService(_productRepositoryMock.Object);
+            sut = new InventoryService(_inventoryRepositoryMock.Object);
         }
 
         [Fact]
@@ -36,11 +36,11 @@ namespace System.Test
             var request = ReturnNewProduct(null);
 
             //Arrange
-            _productRepositoryMock.Setup(x => x.ChecksProductExistInDatabaseAsync(It.IsAny<string>())).ReturnsAsync(false);
+            _inventoryRepositoryMock.Setup(x => x.GetProductAsync(It.IsAny<string>())).ReturnsAsync(request);
 
             var response = await sut.CreateNewProductAsync(request);
 
-            Assert.False(response);
+            Assert.True(response);
         }
         [Fact]
         public async Task Checks_If_Negative_All_Quantity()

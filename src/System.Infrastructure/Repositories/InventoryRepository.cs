@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace System.Infrastructure.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class InventoryRepository : Domain.Interfaces.InfrastructureInterfaces.IInventoryRepository
     {
         private readonly ProductContext _productContext;
 
-        public ProductRepository(ProductContext productContext)
+        public InventoryRepository(ProductContext productContext)
         {
             _productContext = productContext;
         }

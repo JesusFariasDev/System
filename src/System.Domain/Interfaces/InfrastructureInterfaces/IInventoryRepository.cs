@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace System.Domain.Interfaces.InfrastructureInterfaces
 {
-    public interface IProductRepository
+    public interface IInventoryRepository
     {
         Task<Product> GetProductAsync(string code);
         Task<bool> WriteProductInDatabaseAsync(Product product);

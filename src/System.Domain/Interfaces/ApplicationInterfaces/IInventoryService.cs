@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace System.Domain.Interfaces.ApplicationInterfaces
 {
-    public interface IProductService
+    public interface IInventoryService
     {
-        Task<bool> CreateNewProductAsync(Product request, bool newProduct);
+        Task<bool> CreateNewProductAsync(Product request);
+        Task<Product> GetProductAsync(string? code, string? name);
     }
 }
