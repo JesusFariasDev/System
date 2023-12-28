@@ -18,18 +18,37 @@ namespace System.Application.Applications
             _productRepository = productRepository;
         }
 
+        public async Task <List<Product>> GetProductAsync(
+            string? code = null, string? name = null, double? minValue = null, double? maxValue = null, string? supplier = null, string? category = null, bool? disponible = null
+            )
+        {
+            if (minValue != null && maxValue == null) throw new Exception("Please, fill max value for this search.");
+
+            if (maxValue != null && minValue == null) throw new Exception("Please, fill min value for this search.");
+
+            var response = await _productRepository.GetProductAsync(code, name, minValue, maxValue, supplier, category, disponible);
+
+            if (response == null)
+            {
+                throw new Exception("Product not found in our database.");
+            }
+
+            return response;
+        }
+
         public async Task<bool> CreateNewProductAsync(Product request)
         {
             bool response;
+
             if (request == null) throw new ArgumentNullException();
 
-            var product = await GetProductAsync(request.Code, true);
+            await ChecksProductExistInDatabaseAsync(request.Code);
 
-            bool negativeValues = await ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
+            ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
 
             bool writeProductInDatabase = await _productRepository.WriteProductInDatabaseAsync(request);
 
-            if (writeProductInDatabase && !negativeValues)
+            if (writeProductInDatabase)
             {
                 response = true;
             }
@@ -40,27 +59,17 @@ namespace System.Application.Applications
 
             return response;
         }
-
-
-        public async Task<Product> GetProductAsync(string productCode, bool newProduct)
+        public async Task ChecksProductExistInDatabaseAsync(string productCode)
         {
-            var response = await _productRepository.GetProductAsync(productCode);
+            bool response = await _productRepository.ChecksProductExistInDatabaseAsync(productCode);
 
-            if (newProduct && response != null)
+            if (response)
             {
                 throw new Exception("Product already exists in our database");
             }
-
-            else if (!newProduct && response == null)
-            {
-                throw new Exception("Product not found in our database.");
-            }
-
-            return response;
         }
 
-
-        public async Task<bool> ChecksNegativeValues(double allQuantity, double price, double reservedQuantity)
+        public void ChecksNegativeValues(double? allQuantity, double? price, double? reservedQuantity)
         {
             if (allQuantity < 0)
             {
@@ -75,8 +84,6 @@ namespace System.Application.Applications
             {
                 throw new Exception("Reserved quantity cannot be less than 0.");
             }
-
-            return false;
         }
     }
 }

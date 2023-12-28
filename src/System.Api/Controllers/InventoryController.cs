@@ -20,7 +20,7 @@ namespace System.Api.Controllers
         [HttpGet]
         public async Task<Product> GetProductAsync(ProductRequest? request)
         {
-            var response = await _inventoryService.GetProductAsync(request);
+            var response = await _inventoryService.GetProductAsync(request?.Code, request?.Name, request?.MinValue, request?.MaxValue, request?.Supplier, request?.Category, request?.Disponible);
 
             return new Product();
         }

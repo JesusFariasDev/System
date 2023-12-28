@@ -8,6 +8,6 @@
         public double? MaxValue { get; set; }
         public string? Supplier { get; set; }
         public string? Category { get; set; }
-        public bool? Displonible { get; set; }
+        public bool? Disponible { get; set; }
     }
 }

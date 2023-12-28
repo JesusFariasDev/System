@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using System.Application.Applications;
 using System.Domain.Interfaces.ApplicationInterfaces;
 using System.Domain.Interfaces.InfrastructureInterfaces;
+using System.Infrastructure.Context;
 using System.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IInventoryService, InventoryService>();
-builder.Services.AddSingleton<InventoryRepository, InventoryRepository>();
+builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
+builder.Services.AddDbContext<ProductContext>(opt => opt.UseSqlServer("Connectionstrings:DefaultConnection"));
 
 var app = builder.Build();
 

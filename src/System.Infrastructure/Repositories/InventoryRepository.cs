@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Domain.Interfaces.InfrastructureInterfaces;
 using System.Domain.Models;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace System.Infrastructure.Repositories
 {
-    public class InventoryRepository : Domain.Interfaces.InfrastructureInterfaces.IInventoryRepository
+    public class InventoryRepository : IInventoryRepository
     {
         private readonly ProductContext _productContext;
 
@@ -17,15 +18,23 @@ namespace System.Infrastructure.Repositories
         {
             _productContext = productContext;
         }
-        public async Task <Product> GetProductAsync(string productCode)
+        public async Task <List<Product>> GetProductAsync(
+            string? code = null, string? name = null, double? minValue = null, double? maxValue = null, string? supplier = null, string? category = null, bool? disponible = null
+)
         {
-            await _productContext.AddRangeAsync(productCode);
+            return await _productContext.Products.ToListAsync();
 
-            return new Product();
+            
         }
         public async Task <bool> WriteProductInDatabaseAsync(Product product)
         {
             await _productContext.AddRangeAsync(product);
+
+            return true;
+        }
+        public async Task<bool> ChecksProductExistInDatabaseAsync(string productCode)
+        {
+            await _productContext.AddRangeAsync(productCode);
 
             return true;
         }

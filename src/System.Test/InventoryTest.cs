@@ -36,11 +36,11 @@ namespace System.Test
             var request = ReturnNewProduct(null);
 
             //Arrange
-            _inventoryRepositoryMock.Setup(x => x.GetProductAsync(It.IsAny<string>())).ReturnsAsync(request);
+            _inventoryRepositoryMock.Setup(x => x.ChecksProductExistInDatabaseAsync(It.IsAny<string>())).ReturnsAsync(false);
 
             var response = await sut.CreateNewProductAsync(request);
 
-            Assert.True(response);
+            Assert.False(response);
         }
         [Fact]
         public async Task Checks_If_Negative_All_Quantity()
