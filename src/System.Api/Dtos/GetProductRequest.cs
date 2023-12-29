@@ -1,6 +1,6 @@
 ﻿namespace System.Api.Dtos
 {
-    public class ProductRequest
+    public class GetProductRequest
     {
         public string? Code { get; set; }
         public string? Name { get; set; }

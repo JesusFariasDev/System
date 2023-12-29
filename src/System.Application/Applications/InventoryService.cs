@@ -38,24 +38,13 @@ namespace System.Application.Applications
 
         public async Task<bool> CreateNewProductAsync(Product request)
         {
-            bool response;
-
             if (request == null) throw new ArgumentNullException();
 
             await ChecksProductExistInDatabaseAsync(request.Code);
 
             ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
 
-            bool writeProductInDatabase = await _productRepository.WriteProductInDatabaseAsync(request);
-
-            if (writeProductInDatabase)
-            {
-                response = true;
-            }
-            else
-            {
-                response = false;
-            }
+            bool response = await _productRepository.WriteProductInDatabaseAsync(request);
 
             return response;
         }

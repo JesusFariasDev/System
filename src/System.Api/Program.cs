@@ -13,8 +13,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IInventoryService, InventoryService>();
-builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddDbContext<ProductContext>(opt => opt.UseSqlServer("Connectionstrings:DefaultConnection"));
 
 var app = builder.Build();
