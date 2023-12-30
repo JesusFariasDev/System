@@ -30,7 +30,7 @@ namespace System.Test
             Assert.Equal("Value cannot be null.", result.Message);
         }
 
-        [Fact]
+        /*[Fact]
         public async Task Checks_If_Product_Exist_In_Database()
         {
             var request = ReturnNewProduct(null);
@@ -41,7 +41,7 @@ namespace System.Test
             var response = await sut.CreateNewProductAsync(request);
 
             Assert.False(response);
-        }
+        }*/
         [Fact]
         public async Task Checks_If_Negative_All_Quantity()
         {

@@ -9,9 +9,9 @@ namespace System.Domain.Interfaces.ApplicationInterfaces
 {
     public interface IInventoryService
     {
-        Task<bool> CreateNewProductAsync(Product request);
+        Task CreateNewProductAsync(Product request);
         Task<List<Product>> GetProductAsync(
-            string? code, string? name, double? minValue, double? maxValue, string? supplier, string? category, bool? disponible
+            string? code, string? name, double? minValue, double? maxValue, string? category, bool? disponible
             );
     }
 }

@@ -20,17 +20,23 @@ namespace System.Api.Controllers
         [HttpGet]
         public async Task<List<Product>> GetProductAsync(GetProductRequest? request)
         {
-            var response = await _inventoryService.GetProductAsync(request?.Code, request?.Name, request?.MinValue, request?.MaxValue, request?.Supplier, request?.Category, request?.Disponible);
+            var response = await _inventoryService.GetProductAsync(request?.Code, request?.Name, request?.MinValue, request?.MaxValue, request?.Category, request?.Disponible);
 
             return response;
         }
 
         [HttpPost]
-        public async Task<bool> CreateNewProductAsync(Product request)
+        public async Task<ActionResult> CreateNewProductAsync(Product request)
         {
-            bool response = await _inventoryService.CreateNewProductAsync(request);
-
-            return response;
+            try
+            {
+                await _inventoryService.CreateNewProductAsync(request);
+                return Created("$Inventory", request);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new {  ex.Message });
+            }
         }
     }
 }

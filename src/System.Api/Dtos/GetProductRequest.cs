@@ -6,7 +6,6 @@
         public string? Name { get; set; }
         public double? MinValue {  get; set; }
         public double? MaxValue { get; set; }
-        public string? Supplier { get; set; }
         public string? Category { get; set; }
         public bool? Disponible { get; set; }
     }

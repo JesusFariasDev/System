@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace System.Domain.Models
 {
-    [Table("tb_products")]
+    [Table("TB_PRODUCTS")]
     public class Product
     {
         [Key]
@@ -17,14 +17,13 @@ namespace System.Domain.Models
         [Required]
         public string Code { get; set; }
         [Required]
-        public string Name { get; set; }
-        public string? Description { get; set; }
-        public string? CategoryName { get; set; }
-        public List<Supplier> Suppliers { get; set; }
+        public string ProductName { get; set; }
+        public string? ProductDescription { get; set; }
+        public string? Category { get; set; }
         public double? AllQuantity { get; set; }
         public double? DisponibleQuantity { get; set; }
         public double? ReservedQuantity { get; set; }
-        public List<double>? PurchasePrice { get; set; }
+        public double? PurchasePrice { get; set; }
         public DateTime? DateOfPurchase { get; set; }
         public double? Price { get; set; }
         public double? TaxValue { get; set; }

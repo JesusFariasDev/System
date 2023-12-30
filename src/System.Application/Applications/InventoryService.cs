@@ -19,14 +19,14 @@ namespace System.Application.Applications
         }
 
         public async Task <List<Product>> GetProductAsync(
-            string? code = null, string? name = null, double? minValue = null, double? maxValue = null, string? supplier = null, string? category = null, bool? disponible = null
+            string? code = null, string? name = null, double? minValue = null, double? maxValue = null, string? category = null, bool? disponible = null
             )
         {
             if (minValue != null && maxValue == null) throw new Exception("Please, fill max value for this search.");
 
             if (maxValue != null && minValue == null) throw new Exception("Please, fill min value for this search.");
 
-            var response = await _productRepository.GetProductAsync(code, name, minValue, maxValue, supplier, category, disponible);
+            var response = await _productRepository.GetProductAsync(code, name, minValue, maxValue, category, disponible);
 
             if (response == null)
             {
@@ -36,7 +36,7 @@ namespace System.Application.Applications
             return response;
         }
 
-        public async Task<bool> CreateNewProductAsync(Product request)
+        public async Task CreateNewProductAsync(Product request)
         {
             if (request == null) throw new ArgumentNullException();
 
@@ -44,9 +44,7 @@ namespace System.Application.Applications
 
             ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
 
-            bool response = await _productRepository.WriteProductInDatabaseAsync(request);
-
-            return response;
+            await _productRepository.WriteProductInDatabaseAsync(request);
         }
         public async Task ChecksProductExistInDatabaseAsync(string productCode)
         {

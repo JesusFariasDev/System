@@ -15,7 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-builder.Services.AddDbContext<ProductContext>(opt => opt.UseSqlServer("Connectionstrings:DefaultConnection"));
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ProductContext>(opt => opt.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
