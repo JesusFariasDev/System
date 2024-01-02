@@ -19,7 +19,7 @@ namespace System.Application.Applications
         }
 
         public async Task <List<Product>> GetProductAsync(
-            string? code = null, string? name = null, double? minValue = null, double? maxValue = null, string? category = null, bool? disponible = null
+            string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null
             )
         {
             if (minValue != null && maxValue == null) throw new Exception("Please, fill max value for this search.");
@@ -56,7 +56,7 @@ namespace System.Application.Applications
             }
         }
 
-        public void ChecksNegativeValues(double? allQuantity, double? price, double? reservedQuantity)
+        public void ChecksNegativeValues(decimal? allQuantity, decimal? price, decimal? reservedQuantity)
         {
             if (allQuantity < 0)
             {

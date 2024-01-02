@@ -19,7 +19,7 @@ namespace System.Infrastructure.Repositories
             _productContext = productContext;
         }
         public async Task <List<Product>> GetProductAsync(
-            string? code = null, string? name = null, double? minValue = null, double? maxValue = null, string? category = null, bool? disponible = null
+            string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null
 )
         {
             return await _productContext.Products.ToListAsync();

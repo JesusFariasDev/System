@@ -11,7 +11,7 @@ namespace System.Domain.Interfaces.ApplicationInterfaces
     {
         Task CreateNewProductAsync(Product request);
         Task<List<Product>> GetProductAsync(
-            string? code, string? name, double? minValue, double? maxValue, string? category, bool? disponible
+            string? code, string? name, decimal? minValue, decimal? maxValue, string? category, bool? disponible
             );
     }
 }
