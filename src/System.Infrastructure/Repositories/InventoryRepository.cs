@@ -28,7 +28,7 @@ namespace System.Infrastructure.Repositories
         }
         public async Task WriteProductInDatabaseAsync(Product product)
         {
-            await _productContext.Products.AddAsync(new Product
+            await _productContext.Products.AddAsync/*(new Product
             {
                 Code = product.Code,
                 ProductName = product.ProductName,
@@ -42,7 +42,7 @@ namespace System.Infrastructure.Repositories
                 Price = product.Price,
                 TaxValue = product.TaxValue,
                 ProfitMargin = product.ProfitMargin
-            });
+            }*/(product);
 
             await _productContext.SaveChangesAsync();
         }
@@ -53,6 +53,26 @@ namespace System.Infrastructure.Repositories
             var response = (product == null) ? false : true;
 
             return response;
+        }
+
+        public async Task UpdateProductAsync(Product product, Product oldProduct)
+        {
+            oldProduct.Code = product.Code;
+            oldProduct.ProductName = product.ProductName;
+            oldProduct.ProductDescription = product.ProductDescription;
+            oldProduct.Category = product.Category;
+            oldProduct.AllQuantity = product.AllQuantity;
+            oldProduct.DisponibleQuantity = product.DisponibleQuantity;
+            oldProduct.ReservedQuantity = product.ReservedQuantity;
+            oldProduct.PurchasePrice = product.PurchasePrice;
+            oldProduct.DateOfPurchase = product.DateOfPurchase;
+            oldProduct.Price = product.Price;
+            oldProduct.TaxValue = product.TaxValue;
+            oldProduct.ProfitMargin = product.ProfitMargin;
+
+            _productContext.Products.Update(oldProduct);
+
+            await _productContext.SaveChangesAsync();
         }
     }
 }

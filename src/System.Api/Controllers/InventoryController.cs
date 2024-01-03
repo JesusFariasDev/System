@@ -38,5 +38,12 @@ namespace System.Api.Controllers
                 return BadRequest(new {  ex.Message });
             }
         }
+        [HttpPut]
+        public async Task<ActionResult> UpdateProductAsync(Product product, string oldCode)
+        {
+            var newProduct = await _inventoryService.UpdateProductAsync(product, oldCode);
+
+            return Ok(newProduct);
+        }
     }
 }

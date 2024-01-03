@@ -13,6 +13,6 @@ namespace System.Domain.Interfaces.InfrastructureInterfaces
 );
         Task WriteProductInDatabaseAsync(Product product);
         Task<bool> ChecksProductExistInDatabaseAsync(string productCode);
-
+        Task UpdateProductAsync(Product product, Product oldProduct);
     }
 }

@@ -36,15 +36,15 @@ namespace System.Application.Applications
             return response;
         }
 
-        public async Task CreateNewProductAsync(Product request)
+        public async Task CreateNewProductAsync(Product product)
         {
-            if (request == null) throw new ArgumentNullException();
+            if (product == null) throw new ArgumentNullException();
 
-            await ChecksProductExistInDatabaseAsync(request.Code);
+            await ChecksProductExistInDatabaseAsync(product.Code);
 
-            ChecksNegativeValues(request.AllQuantity, request.Price, request.ReservedQuantity);
+            ChecksNegativeValues(product.AllQuantity, product.Price, product.ReservedQuantity);
 
-            await _productRepository.WriteProductInDatabaseAsync(request);
+            await _productRepository.WriteProductInDatabaseAsync(product);
         }
         public async Task ChecksProductExistInDatabaseAsync(string productCode)
         {
@@ -70,6 +70,26 @@ namespace System.Application.Applications
             if (reservedQuantity < 0)
             {
                 throw new Exception("Reserved quantity cannot be less than 0.");
+            }
+        }
+
+        public async Task<Product> UpdateProductAsync(Product product, string oldCode)
+        {
+            var oldProduct = await GetProductAsync(oldCode);
+
+            if (oldProduct == null) 
+            {
+                throw new Exception("Product not found in our database.");
+            }
+
+            try
+            {
+                await _productRepository.UpdateProductAsync(product, oldProduct[0]);
+                return product;
+            }
+            catch
+            {
+                throw new Exception("Product has not been updated.");
             }
         }
     }
