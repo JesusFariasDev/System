@@ -77,6 +77,8 @@ namespace System.Application.Applications
         {
             var oldProduct = await GetProductAsync(oldCode);
 
+            FillTheField(product);
+
             if (oldProduct == null) 
             {
                 throw new Exception("Product not found in our database.");
@@ -90,6 +92,22 @@ namespace System.Application.Applications
             catch
             {
                 throw new Exception("Product has not been updated.");
+            }
+        }
+
+        public void FillTheField<T>(T data)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException("Please, fill the fields.");
+            }
+
+            var properties = typeof(T).GetProperties();
+            var nullPropertie = properties.FirstOrDefault(p => p.GetValue(data) == null);
+
+            if(nullPropertie != null)
+            {
+                throw new ArgumentNullException(nullPropertie.Name, $"{nullPropertie.Name} cannot be null.");
             }
         }
     }

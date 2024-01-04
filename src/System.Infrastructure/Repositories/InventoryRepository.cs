@@ -22,27 +22,11 @@ namespace System.Infrastructure.Repositories
             string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null
 )
         {
-            return await _productContext.Products.ToListAsync();
-
-            
+            return await _productContext.Products.ToListAsync();      
         }
         public async Task WriteProductInDatabaseAsync(Product product)
         {
-            await _productContext.Products.AddAsync/*(new Product
-            {
-                Code = product.Code,
-                ProductName = product.ProductName,
-                ProductDescription = product.ProductDescription,
-                Category = product.Category,
-                AllQuantity = product.AllQuantity,
-                DisponibleQuantity = product.DisponibleQuantity,
-                ReservedQuantity = product.ReservedQuantity,
-                PurchasePrice = product.PurchasePrice,
-                DateOfPurchase = product.DateOfPurchase,
-                Price = product.Price,
-                TaxValue = product.TaxValue,
-                ProfitMargin = product.ProfitMargin
-            }*/(product);
+            await _productContext.Products.AddAsync(product);
 
             await _productContext.SaveChangesAsync();
         }
@@ -71,7 +55,6 @@ namespace System.Infrastructure.Repositories
             oldProduct.ProfitMargin = product.ProfitMargin;
 
             _productContext.Products.Update(oldProduct);
-
             await _productContext.SaveChangesAsync();
         }
     }
