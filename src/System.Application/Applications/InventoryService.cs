@@ -99,7 +99,7 @@ namespace System.Application.Applications
         {
             if (data == null)
             {
-                throw new ArgumentNullException("Please, fill the fields.");
+                throw new ArgumentNullException("Please fill the fields.");
             }
 
             var properties = typeof(T).GetProperties();
@@ -109,6 +109,16 @@ namespace System.Application.Applications
             {
                 throw new ArgumentNullException(nullPropertie.Name, $"{nullPropertie.Name} cannot be null.");
             }
+        }
+        public async Task<bool> DeleteProductAsync(string code, string user)
+        {
+            if (code == null || user == null)
+            {
+                throw new ArgumentNullException("Please fill the fields.");
+            }
+            await _productRepository.DeleteProductAsync(code);
+
+            return true;
         }
     }
 }

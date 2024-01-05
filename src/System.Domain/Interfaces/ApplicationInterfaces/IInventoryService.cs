@@ -13,6 +13,7 @@ namespace System.Domain.Interfaces.ApplicationInterfaces
         Task<List<Product>> GetProductAsync(
             string? code, string? name, decimal? minValue, decimal? maxValue, string? category, bool? disponible
             );
-        Task <Product>UpdateProductAsync(Product product, string oldCode);
+        Task <Product> UpdateProductAsync(Product product, string oldCode);
+        Task<bool> DeleteProductAsync(string product, string user);
     }
 }

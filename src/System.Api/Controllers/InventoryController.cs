@@ -45,5 +45,12 @@ namespace System.Api.Controllers
 
             return Ok(newProduct);
         }
+        [HttpDelete]
+        public async Task<ActionResult> DeleteProductAsync(string code, string user)
+        {
+            await _inventoryService.DeleteProductAsync(code, user);
+
+            return NoContent();
+        }
     }
 }

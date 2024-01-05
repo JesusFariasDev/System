@@ -18,11 +18,28 @@ namespace System.Infrastructure.Repositories
         {
             _productContext = productContext;
         }
-        public async Task <List<Product>> GetProductAsync(
+        public async Task<List<Product>> GetProductAsync(
             string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null
 )
         {
-            return await _productContext.Products.ToListAsync();      
+            if (code != null)
+            {
+                var product = await _productContext.Products.FirstOrDefaultAsync(p => p.Code == code);
+
+                if (product == null)
+                {
+                    throw new ArgumentNullException("Product not found.");
+                }
+
+                List<Product> response = new List<Product> { product };
+
+                return response;
+            }
+            else
+            {
+                return await _productContext.Products.ToListAsync();      
+
+            }
         }
         public async Task WriteProductInDatabaseAsync(Product product)
         {
@@ -55,6 +72,15 @@ namespace System.Infrastructure.Repositories
             oldProduct.ProfitMargin = product.ProfitMargin;
 
             _productContext.Products.Update(oldProduct);
+            await _productContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteProductAsync(string product)
+        {
+            var getProduct = await GetProductAsync(product);
+
+            _productContext.Products.Remove(getProduct[0]);
+            
             await _productContext.SaveChangesAsync();
         }
     }
