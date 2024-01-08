@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace System.Infrastructure.Context
 {
-    public class ProductContext : DbContext
+    public class Context : DbContext
     {
 
         public DbSet<Product> Products { get; set; }
 
-        public ProductContext(DbContextOptions<ProductContext> opt) : base(opt) 
+        public Context(DbContextOptions<Context> opt) : base(opt) 
         { 
         }
 

@@ -12,9 +12,9 @@ namespace System.Infrastructure.Repositories
 {
     public class InventoryRepository : IInventoryRepository
     {
-        private readonly ProductContext _productContext;
+        private readonly Context.Context _productContext;
 
-        public InventoryRepository(ProductContext productContext)
+        public InventoryRepository(Context.Context productContext)
         {
             _productContext = productContext;
         }

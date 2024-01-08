@@ -17,7 +17,7 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ProductContext>(opt => opt.UseSqlServer(connectionString));
+builder.Services.AddDbContext<Context>(opt => opt.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
