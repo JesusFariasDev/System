@@ -12,6 +12,7 @@ namespace System.Infrastructure.Context
     {
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         public Context(DbContextOptions<Context> opt) : base(opt) 
         { 
