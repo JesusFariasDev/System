@@ -33,45 +33,18 @@ namespace System.Infrastructure.Repositories
                     throw new Exception("Pagination cannot be null.");
                 }
 
-                if ()
-                {
-
-                }
-
-                var query = _productContext.Products.AsQueryable();
-
-                if (code != null)
-                {
-                    query = query.Where(p => p.Code == code);
-                }
-                if (name != null)
-                {
-                    query = query.Where(p => p.ProductName == name);
-                }
-
-                if (minValue != null && maxValue != null)
-                {
-                    query = query.Where(p => p.Price >= minValue && p.Price <= maxValue);
-                }
-                if (category != null)
-                {
-
-                }
-                if (disponible != null)
-                {
-
-                }
-                var products = await _productContext.Products
-                    
-                    .Where(name != null ? p => p.Name == name : true)
-                    .Where(minValue != null && maxValue != null ? p => p. : true)
-                    .Where(category != null ? p => p.Category == category : true)
-                    .Where(disponible != null ? p => p.Disponible == disponible : true)
-                    
-                    //.OrderBy(p => p.Code)
+                var query = await _productContext.Products.Where(p =>
+                    (code != null ? p.Code == code : false) &&
+                    (productName != null ? p.ProductName == productName : false) &&
+                    (minPrice != null ? p.Price >= minPrice : false) &&
+                    (maxPrice != null ? p.Price <= maxPrice : false) &&
+                    (category != null ? p.Category == category : false) &&
+                    (disponible != null ? p.DisponibleQuantity > 0 : false))
+                    .OrderBy(p => p.Code)
                     .Skip(pageIndex * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
+
                 return products;
                     /*, totalCount, totalPages;*/
             }
