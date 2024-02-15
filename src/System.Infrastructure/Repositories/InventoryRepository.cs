@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Domain.Interfaces.InfrastructureInterfaces;
@@ -19,10 +20,62 @@ namespace System.Infrastructure.Repositories
             _productContext = productContext;
         }
         public async Task<List<Product>> GetProductAsync(
-            string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null
+           int pageIndex, int pageSize, string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null
 )
         {
-            if (code != null)
+            if (pageSize > 0 && pageIndex > 0)
+            {
+                int productsCount = _productContext.Products.Count();
+                int? totalPages = productsCount / pageSize;
+
+                if (pageIndex > totalPages)
+                {
+                    throw new Exception("Pagination cannot be null.");
+                }
+
+                if ()
+                {
+
+                }
+
+                var query = _productContext.Products.AsQueryable();
+
+                if (code != null)
+                {
+                    query = query.Where(p => p.Code == code);
+                }
+                if (name != null)
+                {
+                    query = query.Where(p => p.ProductName == name);
+                }
+
+                if (minValue != null && maxValue != null)
+                {
+                    query = query.Where(p => p.Price >= minValue && p.Price <= maxValue);
+                }
+                if (category != null)
+                {
+
+                }
+                if (disponible != null)
+                {
+
+                }
+                var products = await _productContext.Products
+                    
+                    .Where(name != null ? p => p.Name == name : true)
+                    .Where(minValue != null && maxValue != null ? p => p. : true)
+                    .Where(category != null ? p => p.Category == category : true)
+                    .Where(disponible != null ? p => p.Disponible == disponible : true)
+                    
+                    //.OrderBy(p => p.Code)
+                    .Skip(pageIndex * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+                return products;
+                    /*, totalCount, totalPages;*/
+            }
+            /*if (code != null)
             {
                 var product = await _productContext.Products.FirstOrDefaultAsync(p => p.Code == code);
 
@@ -37,9 +90,29 @@ namespace System.Infrastructure.Repositories
             }
             else
             {
+                if (pageSize != null && pageIndex != null)
+                {
+                    int productsCount = _productContext.Products.Count();
+                    int? totalPages = productsCount / pageSize;
+
+                    if(pageIndex > totalPages)
+                    {
+                        throw new Exception("Pagination cannot be null.");
+                    }
+
+                    var products = await _productContext.Products
+                        .OrderBy(p = p => p.ProductId)
+                        .Skip(pageIndex * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
+                    return products, totalCount, totalPages;
+                }
+
+
+
                 return await _productContext.Products.ToListAsync();      
 
-            }
+            }*/
         }
         public async Task WriteProductInDatabaseAsync(Product product)
         {

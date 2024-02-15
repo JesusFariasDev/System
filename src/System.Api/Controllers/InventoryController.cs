@@ -18,7 +18,7 @@ namespace System.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Product>> GetProductAsync(GetProductRequest? request)
+        public async Task<ActionResult> GetProductAsync(GetProductRequest? request)
         {
             var response = await _inventoryService.GetProductAsync(request?.Code, request?.Name, request?.MinValue, request?.MaxValue, request?.Category, request?.Disponible);
 

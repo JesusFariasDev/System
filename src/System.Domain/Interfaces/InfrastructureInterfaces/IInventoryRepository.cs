@@ -9,7 +9,7 @@ namespace System.Domain.Interfaces.InfrastructureInterfaces
 {
     public interface IInventoryRepository
     {
-        Task<List<Product>> GetProductAsync(string? code, string? name, decimal? minValue, decimal? maxValue, string? category, bool? disponible
+        Task<List<Product>> GetProductAsync(string? code, string? name, decimal? minValue, decimal? maxValue, string? category, bool? disponible, int? pageNumber = null, int? pageSize = null
 );
         Task WriteProductInDatabaseAsync(Product product);
         Task<bool> ChecksProductExistInDatabaseAsync(string productCode);
