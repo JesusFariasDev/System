@@ -19,11 +19,11 @@ namespace System.Infrastructure.Repositories
         {
             _productContext = productContext;
         }
-        public async Task<List<Product>> GetProductAsync(
-           int pageIndex, int pageSize, string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null
+        public async Task<PaginatedProducts> GetProductAsync(
+           string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 1
 )
         {
-            if (pageSize > 0 && pageIndex > 0)
+            if (pageSize.HasValue && pageIndex.HasValue)
             {
                 int productsCount = _productContext.Products.Count();
                 int? totalPages = productsCount / pageSize;
@@ -33,7 +33,7 @@ namespace System.Infrastructure.Repositories
                     throw new Exception("Pagination cannot be null.");
                 }
 
-                var query = await _productContext.Products.Where(p =>
+                var products = await _productContext.Products.Where(p =>
                     (code != null ? p.Code == code : false) &&
                     (productName != null ? p.ProductName == productName : false) &&
                     (minPrice != null ? p.Price >= minPrice : false) &&
@@ -41,12 +41,16 @@ namespace System.Infrastructure.Repositories
                     (category != null ? p.Category == category : false) &&
                     (disponible != null ? p.DisponibleQuantity > 0 : false))
                     .OrderBy(p => p.Code)
-                    .Skip(pageIndex * pageSize)
-                    .Take(pageSize)
+                    .Skip(pageIndex.Value * pageSize.Value)
+                    .Take(pageSize.Value)
                     .ToListAsync();
 
-                return products;
+                return new PaginatedProducts { ProductsCount = productsCount, TotalPages = totalPages, Products = products };
                     /*, totalCount, totalPages;*/
+            }
+            else
+            {
+                throw new ArgumentException("Pagination cannot be null");
             }
             /*if (code != null)
             {
@@ -125,7 +129,7 @@ namespace System.Infrastructure.Repositories
         {
             var getProduct = await GetProductAsync(product);
 
-            _productContext.Products.Remove(getProduct[0]);
+            _productContext.Products.Remove(getProduct.Products[0]);
             
             await _productContext.SaveChangesAsync();
         }

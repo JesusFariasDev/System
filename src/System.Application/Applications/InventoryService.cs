@@ -18,15 +18,15 @@ namespace System.Application.Applications
             _productRepository = productRepository;
         }
 
-        public async Task <List<Product>> GetProductAsync(
-            string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null
+        public async Task <PaginatedProducts> GetProductAsync(
+            string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 1
             )
         {
             if (minValue != null && maxValue == null) throw new Exception("Please, fill max value for this search.");
 
             if (maxValue != null && minValue == null) throw new Exception("Please, fill min value for this search.");
 
-            var response = await _productRepository.GetProductAsync(code, name, minValue, maxValue, category, disponible);
+            var response = await _productRepository.GetProductAsync(code, name, minValue, maxValue, category, disponible, pageIndex, pageSize);
 
             if (response == null)
             {
@@ -79,14 +79,14 @@ namespace System.Application.Applications
 
             FillTheField(product);
 
-            if (oldProduct == null) 
+            if (oldProduct.Products == null) 
             {
                 throw new Exception("Product not found in our database.");
             }
 
             try
             {
-                await _productRepository.UpdateProductAsync(product, oldProduct[0]);
+                await _productRepository.UpdateProductAsync(product, oldProduct.Products[0]);
                 return product;
             }
             catch
