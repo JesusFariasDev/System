@@ -23,35 +23,31 @@ namespace System.Infrastructure.Repositories
            string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 1
 )
         {
-            if (pageSize.HasValue && pageIndex.HasValue)
+            int productsCount = _productContext.Products.Count();
+            int? totalPages = productsCount / pageSize;
+
+            var products = await _productContext.Products.Where(p =>
+                (code != null ? p.Code == code : false) &&
+                (productName != null ? p.ProductName == productName : false) &&
+                (minPrice != null ? p.Price >= minPrice : false) &&
+                (maxPrice != null ? p.Price <= maxPrice : false) &&
+                (category != null ? p.Category == category : false) &&
+                (disponible != null ? p.DisponibleQuantity > 0 : false))
+                .OrderBy(p => p.Code)
+                .Skip(pageIndex.Value * pageSize.Value)
+                .Take(pageSize.Value)
+                .ToListAsync();
+
+            return new PaginatedProducts { ProductsCount = productsCount, TotalPages = totalPages, Products = products };
+            /*if (pageSize.HasValue && pageIndex.HasValue)
             {
-                int productsCount = _productContext.Products.Count();
-                int? totalPages = productsCount / pageSize;
-
-                if (pageIndex > totalPages)
-                {
-                    throw new Exception("Pagination cannot be null.");
-                }
-
-                var products = await _productContext.Products.Where(p =>
-                    (code != null ? p.Code == code : false) &&
-                    (productName != null ? p.ProductName == productName : false) &&
-                    (minPrice != null ? p.Price >= minPrice : false) &&
-                    (maxPrice != null ? p.Price <= maxPrice : false) &&
-                    (category != null ? p.Category == category : false) &&
-                    (disponible != null ? p.DisponibleQuantity > 0 : false))
-                    .OrderBy(p => p.Code)
-                    .Skip(pageIndex.Value * pageSize.Value)
-                    .Take(pageSize.Value)
-                    .ToListAsync();
-
-                return new PaginatedProducts { ProductsCount = productsCount, TotalPages = totalPages, Products = products };
-                    /*, totalCount, totalPages;*/
+                
+                    *//*, totalCount, totalPages;*//*
             }
             else
             {
                 throw new ArgumentException("Pagination cannot be null");
-            }
+            }*/
             /*if (code != null)
             {
                 var product = await _productContext.Products.FirstOrDefaultAsync(p => p.Code == code);

@@ -6,7 +6,7 @@ using System.Domain.Models;
 namespace System.Api.Controllers
 {
     [ApiController]
-    [Route("/Inventory")]
+    [Route("/inventory")]
     [Produces("application/json")]
     public class InventoryController :ControllerBase
     {
@@ -17,7 +17,7 @@ namespace System.Api.Controllers
             _inventoryService = inventoryService;
         }
 
-        [HttpGet]
+        [HttpPost("aaa")]
         public async Task<ActionResult> GetProductAsync(GetProductRequest? request)
         {
             var response = await _inventoryService.GetProductAsync(request?.Code, request?.Name, request?.MinValue, request?.MaxValue, request?.Category, request?.Disponible, request?.PageSize, request?.PageIndex);
