@@ -8,7 +8,5 @@
         public decimal? MaxValue { get; set; }
         public string? Category { get; set; }
         public bool? Disponible { get; set; }
-        public int? PageIndex { get; set; }
-        public int? PageSize { get; set; }
     }
 }

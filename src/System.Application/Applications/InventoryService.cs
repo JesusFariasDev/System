@@ -19,7 +19,7 @@ namespace System.Application.Applications
         }
 
         public async Task <PaginatedProducts> GetProductAsync(
-            string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 1
+            string? code = null, string? name = null, decimal? minValue = null, decimal? maxValue = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 20
             )
         {
             if (minValue != null && maxValue == null) throw new Exception("Please, fill max value for this search.");

@@ -8,6 +8,7 @@ using System.Infrastructure.Context;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace System.Infrastructure.Repositories
 {
@@ -20,72 +21,27 @@ namespace System.Infrastructure.Repositories
             _productContext = productContext;
         }
         public async Task<PaginatedProducts> GetProductAsync(
-           string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 1
+           string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 20
 )
         {
-            int productsCount = _productContext.Products.Count();
+            var query = _productContext.Products.AsQueryable().Where(p =>
+                (code != null ? p.Code == code : true) &&
+                (productName != null ? p.ProductName == productName : true) &&
+                (minPrice != null ? p.Price >= minPrice : true) &&
+                (maxPrice != null ? p.Price <= maxPrice : true) &&
+                (category != null ? p.Category == category : true) &&
+                (disponible != null ? p.DisponibleQuantity > 0 : true));
+
+            var productsCount = await query.CountAsync();
             int? totalPages = productsCount / pageSize;
 
-            var products = await _productContext.Products.Where(p =>
-                (code != null ? p.Code == code : false) &&
-                (productName != null ? p.ProductName == productName : false) &&
-                (minPrice != null ? p.Price >= minPrice : false) &&
-                (maxPrice != null ? p.Price <= maxPrice : false) &&
-                (category != null ? p.Category == category : false) &&
-                (disponible != null ? p.DisponibleQuantity > 0 : false))
-                .OrderBy(p => p.Code)
-                .Skip(pageIndex.Value * pageSize.Value)
+            var products = await query.OrderBy(p => p.Code)
+                .Skip(productsCount > pageSize.Value ? pageIndex.Value * pageSize.Value : 0)
                 .Take(pageSize.Value)
                 .ToListAsync();
 
             return new PaginatedProducts { ProductsCount = productsCount, TotalPages = totalPages, Products = products };
-            /*if (pageSize.HasValue && pageIndex.HasValue)
-            {
-                
-                    *//*, totalCount, totalPages;*//*
-            }
-            else
-            {
-                throw new ArgumentException("Pagination cannot be null");
-            }*/
-            /*if (code != null)
-            {
-                var product = await _productContext.Products.FirstOrDefaultAsync(p => p.Code == code);
 
-                if (product == null)
-                {
-                    throw new ArgumentNullException("Product not found.");
-                }
-
-                List<Product> response = new List<Product> { product };
-
-                return response;
-            }
-            else
-            {
-                if (pageSize != null && pageIndex != null)
-                {
-                    int productsCount = _productContext.Products.Count();
-                    int? totalPages = productsCount / pageSize;
-
-                    if(pageIndex > totalPages)
-                    {
-                        throw new Exception("Pagination cannot be null.");
-                    }
-
-                    var products = await _productContext.Products
-                        .OrderBy(p = p => p.ProductId)
-                        .Skip(pageIndex * pageSize)
-                        .Take(pageSize)
-                        .ToListAsync();
-                    return products, totalCount, totalPages;
-                }
-
-
-
-                return await _productContext.Products.ToListAsync();      
-
-            }*/
         }
         public async Task WriteProductInDatabaseAsync(Product product)
         {
