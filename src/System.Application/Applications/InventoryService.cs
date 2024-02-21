@@ -26,6 +26,10 @@ namespace System.Application.Applications
 
             if (maxValue != null && minValue == null) throw new Exception("Please, fill min value for this search.");
 
+            if (pageIndex == null) {  pageIndex = 1; }
+
+            if (pageSize == null) {  pageSize = 20; }
+
             var response = await _productRepository.GetProductAsync(code, name, minValue, maxValue, category, disponible, pageIndex, pageSize);
 
             if (response == null)

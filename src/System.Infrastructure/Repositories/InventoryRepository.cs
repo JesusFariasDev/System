@@ -21,7 +21,7 @@ namespace System.Infrastructure.Repositories
             _productContext = productContext;
         }
         public async Task<PaginatedProducts> GetProductAsync(
-           string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 20
+           string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null, int? pageIndex = null, int? pageSize = null
 )
         {
             var query = _productContext.Products.AsQueryable().Where(p =>
@@ -41,7 +41,6 @@ namespace System.Infrastructure.Repositories
                 .ToListAsync();
 
             return new PaginatedProducts { ProductsCount = productsCount, TotalPages = totalPages, Products = products };
-
         }
         public async Task WriteProductInDatabaseAsync(Product product)
         {

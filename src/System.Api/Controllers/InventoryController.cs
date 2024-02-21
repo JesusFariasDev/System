@@ -17,10 +17,11 @@ namespace System.Api.Controllers
             _inventoryService = inventoryService;
         }
 
-        [HttpGet("aaa")]
-        public async Task<ActionResult> GetProductAsync(string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null, int? pageIndex = 1, int? pageSize = 20)
+        [HttpGet]
+        [ProducesResponseType(typeof(PaginatedProducts), 200)]
+        public async Task<ActionResult> GetProductAsync([FromQuery]GetProductRequest request)
         {
-            var response = await _inventoryService.GetProductAsync(code, productName, minPrice, maxPrice, category, disponible, pageIndex, pageSize);
+            var response = await _inventoryService.GetProductAsync(request.Code, request?.Name, request?.MinPrice, request?.MaxPrice, request?.Category, request?.Disponible, request?.PageIndex, request?.PageSize);
 
             return Ok(response);
         }
