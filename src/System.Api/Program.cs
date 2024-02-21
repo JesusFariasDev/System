@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddCors();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Context>(opt => opt.UseSqlServer(connectionString));
@@ -27,6 +28,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder =>
+{
+    builder.WithOrigins("http://localhost:4200")
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+});
 
 app.UseHttpsRedirection();
 
