@@ -22,8 +22,7 @@ namespace System.Domain.Models
         public string? Category { get; set; }
         public decimal? AllQuantity { get; set; }
         public decimal? DisponibleQuantity { get; set; }
-/*        public DateTime? BestBefore { get; set; }
-*/        public decimal? ReservedQuantity { get; set; }
+        public decimal? ReservedQuantity { get; set; }
         public decimal? PurchasePrice { get; set; }
         public DateTime? DateOfPurchase { get; set; }
         public decimal? Price { get; set; }

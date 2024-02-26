@@ -26,7 +26,7 @@ namespace System.Application.Applications
 
             if (maxValue != null && minValue == null) throw new Exception("Please, fill min value for this search.");
 
-            if (pageIndex == null) {  pageIndex = 1; }
+            if (pageIndex == null) {  pageIndex = 0; }
 
             if (pageSize == null) {  pageSize = 20; }
 

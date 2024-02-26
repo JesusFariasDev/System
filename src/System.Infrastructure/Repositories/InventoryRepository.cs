@@ -24,13 +24,18 @@ namespace System.Infrastructure.Repositories
            string? code, string? productName = null, decimal? minPrice = null, decimal? maxPrice = null, string? category = null, bool? disponible = null, int? pageIndex = null, int? pageSize = null
 )
         {
-            var query = _productContext.Products.AsQueryable().Where(p =>
-                (code != null ? p.Code == code : true) &&
-                (productName != null ? p.ProductName == productName : true) &&
+            var query = _productContext.Products
+                .AsQueryable()
+                .AsNoTracking()
+                .Where(p =>
+                (code != null ? p.Code.StartsWith(code) : true) &&
+                (productName != null ? p.ProductName.Contains(productName) : true) &&
                 (minPrice != null ? p.Price >= minPrice : true) &&
                 (maxPrice != null ? p.Price <= maxPrice : true) &&
                 (category != null ? p.Category == category : true) &&
-                (disponible != null ? p.DisponibleQuantity > 0 : true));
+                (disponible != null && disponible == true ? p.DisponibleQuantity > 0 : true) &&
+                (disponible != null && disponible == false ? p.DisponibleQuantity < 1 : true));
+
 
             var productsCount = await query.CountAsync();
             int? totalPages = productsCount / pageSize;
