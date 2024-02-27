@@ -38,7 +38,12 @@ namespace System.Infrastructure.Repositories
 
 
             var productsCount = await query.CountAsync();
-            int? totalPages = productsCount / pageSize;
+            int totalPages = productsCount / pageSize.Value;
+            bool hasLeftOver = productsCount % pageSize.Value != 0;
+            if (hasLeftOver)
+            {
+                totalPages++;
+            }
 
             var products = await query.OrderBy(p => p.Code)
                 .Skip(productsCount > pageSize.Value ? pageIndex.Value * pageSize.Value : 0)
